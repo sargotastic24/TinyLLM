@@ -1,4 +1,4 @@
-# TinyGPT — A Small Language Model Trained from Scratch
+# TinyLLM — A Small Language Model Trained from Scratch
 
 **Author:** Sarthak Goyal  
 **Framework:** PyTorch  
@@ -9,7 +9,7 @@
 
 ## Overview
 
-TinyGPT is a minimal Transformer-based language model that is implemented and trained from scratch using PyTorch and SentencePiece.
+TinyLLM is a minimal Transformer-based language model that is implemented and trained from scratch using PyTorch and SentencePiece.
 The goal of this project is to demonstrate a practical understanding of how large language models (LLMs) such as GPT function internally — from tokenization and embeddings to attention mechanisms and text generation.
 
 This implementation reproduces the core ideas of GPT in a compact form that can be trained on a single machine, showing that even a small model can learn grammar, sentence structure, and generate coherent text.
@@ -30,7 +30,7 @@ This implementation reproduces the core ideas of GPT in a compact form that can 
 
 ## Architecture
 
-TinyGPT follows the standard Transformer decoder (GPT-like) architecture.
+TinyLLM follows the standard Transformer decoder (GPT-like) architecture.
 
 ```
 Text → Tokenization → Embeddings → Positional Encoding
@@ -256,7 +256,7 @@ This project is released under the MIT License.
 ## Citation
 
 ```
-Goyal, Sarthak. (2025). TinyGPT: A Small Transformer Language Model Trained from Scratch. GitHub repository.
+Goyal, Sarthak. (2025). TinyLLM: A Small Transformer Language Model Trained from Scratch. GitHub repository.
 ```
 
 ---
