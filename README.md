@@ -1,50 +1,54 @@
-TinyLLM — A Small Language Model Trained from Scratch
-by Sarthak Goyal
+# TinyGPT — A Small Language Model Trained from Scratch
 
-A minimal Transformer-based language model (LM) trained completely from scratch, without using any pre-trained weights or APIs.
-Built and trained using PyTorch and SentencePiece, this project demonstrates that even a small, self-trained model can learn grammar, sentence structure, and text generation.
+**Author:** Sarthak Goyal
+**Framework:** PyTorch
+**Tokenizer:** SentencePiece
+**Keywords:** Transformer, NLP, Language Model, GPT, Deep Learning
 
-Project Overview
+---
 
-TinyGPT is a simplified GPT-like model that learns to predict the next token in a sequence of text.
-It’s trained on a small dataset (BookCorpus) and can generate text similar in tone and structure to the dataset it’s trained on.
+## Overview
 
-This project shows end-to-end understanding of how LLMs actually work:
+TinyGPT is a minimal Transformer-based language model that is implemented and trained from scratch using PyTorch and SentencePiece.
+The goal of this project is to demonstrate a practical understanding of how large language models (LLMs) such as GPT function internally — from tokenization and embeddings to attention mechanisms and text generation.
 
-tokenization → embeddings → attention → training → text generation
+This implementation reproduces the core ideas of GPT in a compact form that can be trained on a single machine, showing that even a small model can learn grammar, sentence structure, and generate coherent text.
 
-Features
+---
 
-Custom SentencePiece tokenizer
+## Features
 
-Lightweight Transformer decoder (GPT-style)
+* Custom tokenizer trained using SentencePiece
+* Transformer decoder architecture with multi-head self-attention
+* Causal masking for autoregressive (next-token) prediction
+* Configurable architecture (layers, heads, embedding size, sequence length)
+* End-to-end training pipeline built in PyTorch
+* Text generation with temperature and sampling control
+* Compatible with CPU and Apple Silicon GPU acceleration
 
-Causal self-attention for next-token prediction
+---
 
-Training from scratch on small datasets
+## Architecture
 
-Text generation with temperature & sampling
+TinyGPT follows the standard Transformer decoder (GPT-like) architecture.
 
-Optional loss curve visualization
+```
+Text → Tokenization → Embeddings → Positional Encoding
+     → Multi-Head Self-Attention → Feed-Forward Layers
+     → Softmax → Next Token Prediction
+```
 
-Runs on CPU or Apple M2 GPU
+**Core components:**
 
-Architecture Overview
-Text → Tokenizer → Token IDs → Embeddings → Positional Encoding
-     → Multi-Head Self-Attention → Feed-Forward Layers → Softmax
-     → Next Token Prediction → Generation Loop
+* Token and positional embeddings
+* Scaled dot-product multi-head self-attention
+* Feed-forward network with non-linearity
+* Residual connections and layer normalization
+* Cross-entropy loss for next-token prediction
 
+Example configuration:
 
-Each block contains:
-
-Attention: Learns relationships between tokens
-
-Feed-forward: Transforms features
-
-Residual connections + LayerNorm: Stability during training
-
-Config example:
-
+```python
 config = GPTConfig(
     vocab_size=5000,
     n_layers=6,
@@ -54,138 +58,205 @@ config = GPTConfig(
     context_length=512,
     dropout=0.1
 )
+```
 
-Project Structure
+---
+
+## Project Structure
+
+```
 tiny-llm/
 │
-├── data/                # raw training data (.txt)
-├── tokenizer/           # SentencePiece model + vocab
+├── data/                # Training data (.txt)
+├── tokenizer/           # SentencePiece tokenizer files
 ├── model/
-│   └── tiny_gpt.py      # Transformer architecture
+│   └── tiny_gpt.py      # Transformer model implementation
 ├── train_dataset.py     # Dataset loader
 ├── train_tokenizer.py   # Tokenizer training script
 ├── train.py             # Training loop
 ├── generate.py          # Text generation script
-└── requirements.txt
+└── requirements.txt     # Python dependencies
+```
 
-Setup Instructions
-Create a virtual environment
+---
+
+## Installation
+
+Create and activate a virtual environment:
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
-Install dependencies
+Install dependencies:
+
+```bash
 pip install torch tqdm numpy sentencepiece matplotlib
+```
 
-Prepare dataset
+---
 
-Place a plain-text file at:
+## Data Preparation
 
+Place a plain-text dataset at:
+
+```
 data/raw.txt
-Examples:
+```
 
-BookCorpus
+Recommended datasets:
 
-Mix of classic books (Pride and Prejudice, Sherlock Holmes, Alice in Wonderland, etc.)
+* [BookCorpus](https://huggingface.co/datasets/bookcorpus)
+* [TinyStories](https://huggingface.co/datasets/roneneldan/TinyStories)
+* Public-domain literature (e.g., Sherlock Holmes, Pride and Prejudice)
 
-Training Your Model
+---
 
-Train tokenizer:
+## Training
 
+Train the tokenizer:
+
+```bash
 python train_tokenizer.py
+```
 
+Train the model:
 
-Train model:
-
+```bash
 python train.py
+```
 
+After training, a model checkpoint will be saved as:
 
-You’ll see progress bars and a loss graph:
+```
+checkpoint.pt
+```
 
-Epoch 1/3: loss=3.9
-Epoch 2/3: loss=2.8
-Model training complete! Saved as checkpoint.pt
+A loss curve will also be generated and saved as `training_loss.png`.
 
+---
 
-Loss curve is saved as training_loss.png.
+## Model Checkpoint
 
-Generating Text
+The trained weights (`checkpoint.pt`) are not included in this repository due to file size limitations.
+To reproduce them, run the training script on your machine using your dataset.
+If required, checkpoints can be hosted externally (e.g., Google Drive or Hugging Face Hub).
 
-Run your model:
+---
 
+## Text Generation
+
+Once trained, you can generate text using:
+
+```bash
 python generate.py
-
+```
 
 Example:
 
+```
 Enter a prompt: The sun rose over the city
-
+```
 
 Output:
 
-The sun rose over the city and the streets began to shimmer with quiet light...
+```
+The sun rose over the city and the streets began to shimmer with quiet light.
+```
 
+Control the generation with:
 
-Control creativity with TEMPERATURE (0.7–1.2) and output length with MAX_NEW_TOKENS.
+* `MAX_NEW_TOKENS` for output length
+* `TEMPERATURE` for randomness (lower = more focused, higher = more creative)
 
-Results
-Dataset	Behavior	Notes
-Meditations	Philosophical, reflective	Focused on Stoic tone
-BookCorpus	Fluent, modern English	General writing style
-TinyStories	Simple, structured	Ideal for small models
+---
 
-Training took ~2–4 hours on an Apple M2 MacBook Air.
+## Example Run
 
-How It Works (Short Explanation)
+```bash
+# Activate virtual environment
+source /Users/sarthakgoyal/Documents/tiny-llm/.venv/bin/activate
 
-Tokenization — splits text into subword tokens
+# Train the model
+(.venv) sarthakgoyal@Sarthak tiny-llm % python train.py
+Epoch 1/3: 100%|██████████████████████████████████████████████████████████████████| 12631/12631 [3:03:26<00:00, 1.15it/s, loss=0.0935]
+Epoch 2/3: 100%|██████████████████████████████████████████████████████████████████| 12631/12631 [3:03:40<00:00, 1.15it/s, loss=0.0618]
+Epoch 3/3: 100%|██████████████████████████████████████████████████████████████████| 12631/12631 [3:09:26<00:00, 1.11it/s, loss=0.0698]
+Model training complete! Saved as checkpoint.pt
 
-Embeddings — map tokens into high-dimensional vectors
+# Generate text
+(.venv) sarthakgoyal@Sarthak tiny-llm % python generate.py
+Model loaded! Ready to generate.
 
-Positional encodings — preserve token order
+Enter a prompt: The quick brown fox
 
-Self-attention — each token “attends” to previous ones to gather context
+Generated text:
+-----------------------------------
+The quick brown fox was scared and started to cry. The bear ran away. Even though the bear had taken the snow he had not had a great day after all.  ⁇ endoftext ⁇  Molly and her mom were sitting outside in the sun. It was Wednesday and they were enjoying their healthy snack.  ⁇ Look what I made, ⁇  said mom. Molly looked over
+-----------------------------------
 
-Feed-forward layers — refine learned features
+You: I am a boy
+tinyLLM: I am a boy named Timmy. Now, he could use some help. Now, he did. He looked back and saw a big green frog with big eyes. The frog saw the squirrel was lost, so it jumped to the squirrel ⁇ s aid. The frog saw the squirrel needed help to find its way home, so it supplied a few friendly hops and jumps to show
 
-Output logits — predict the probability of the next token
+You: story time
+tinyLLM: story time to go home. ⁇  The two friends started to playing the weapon. They ran and jumped and rolled on the grass. Ben watched them from the tree. He felt lonely and sad. Then, something bad happened. The dog saw a squirrel. The dog wanted to catch the squirrel. The dog ran after the squirrel. The dog forgot about Lily. The dog pull
 
-Sampling loop — generate new tokens autoregressively
+You: green
+tinyLLM: green park with her family. She, curious and excited to explore the unknown. As she looked down at her staff and hopped back and forth, planting each flower with a big splash. In the end, the little girl ⁇ s mama was very proud of her daughter, and she thanked her for all the hard work. The little girl smiled, knowing that she had done
 
-Loss function: Cross Entropy
-Training objective: Next-token prediction
+You: red ball
+tinyLLM: red balloon. That made it easy to pass.  ⁇ oe quickly grabbed the handle and passed the balloon to his friend. His friend was so happy and they played with the balloon until the sun went down!  ⁇ endoftext ⁇  Once upon a time, there was a light that shone in the darkness. One night, something very sad happened. The light became miserable and wasn ⁇ t so bright
 
-Example Outputs
+You: safe
+tinyLLM: safe. He was so excited to have done something so special and was looking forward to doing it again!  ⁇ endoftext ⁇  It was a hot summer day. Lucy and her mom were out in the yard. Lucy ⁇ s mom was gardening and Lucy was playing with a ball. Suddenly, Lucy ⁇ s ball rolled towards the house and stop
+```
 
-(Replace with your own model’s examples)
+---
 
-Prompt: The meaning of life is
-Output: The meaning of life is found not in possessions but in the way we perceive each moment.
+## Results
 
-Prompt: Once upon a time
-Output: Once upon a time there was a child who dreamed of building a world from words.
+| Dataset                       | Description               | Output Style       |
+| ----------------------------- | ------------------------- | ------------------ |
+| Meditations (Marcus Aurelius) | Philosophical reflections | Stoic, reflective  |
+| BookCorpus                    | General modern English    | Fluent, coherent   |
+| TinyStories                   | Synthetic English stories | Structured, simple |
 
-What You Learn From This Project
+Training time: approximately 2–4 hours on Apple M2 hardware.
 
-How tokenization, embeddings, and attention interact
+---
 
-How Transformers actually learn text relationships
+## Technical Summary
 
-How generation uses probabilistic sampling
+**Objective:** Next-token prediction using causal language modeling
+**Loss function:** Cross-Entropy Loss
+**Optimizer:** AdamW
+**Sampling method:** Temperature-based multinomial sampling
+**Data encoding:** Subword tokens via SentencePiece
+**Implementation:** 100% PyTorch
 
-How model architecture changes affect output tone and quality
+---
 
-Future Improvements
+## Future Work
 
-Add attention map visualization
+* Attention weight visualization
+* Model quantization (INT8) for deployment
+* Interactive chat interface
+* Fine-tuning on domain-specific datasets
+* Export to ONNX or CoreML
 
-Experiment with INT8 quantization
+---
 
-Create chat interface (persistent conversation context)
+## License
 
-Fine-tune on custom writing style or dialogues
+This project is released under the MIT License.
 
-Export for mobile inference (CoreML / ONNX)
+---
 
-Author
+## Citation
 
-Sarthak Goyal
+```
+Goyal, Sarthak. (2025). TinyGPT: A Small Transformer Language Model Trained from Scratch. GitHub repository.
+```
+
+---
