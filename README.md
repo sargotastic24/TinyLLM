@@ -1,8 +1,8 @@
 # TinyGPT — A Small Language Model Trained from Scratch
 
-**Author:** Sarthak Goyal
-**Framework:** PyTorch
-**Tokenizer:** SentencePiece
+**Author:** Sarthak Goyal  
+**Framework:** PyTorch  
+**Tokenizer:** SentencePiece  
 **Keywords:** Transformer, NLP, Language Model, GPT, Deep Learning
 
 ---
